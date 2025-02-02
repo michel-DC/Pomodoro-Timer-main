@@ -1,11 +1,44 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import TimerDisplay from "../components/TimerDisplay";
 import TimerControls from "../components/TimerControls";
 
 function Home() {
-  const [timeLeft, setTimeLeft] = useState(25 * 60); // 25 minutes en secondes
+  // États pour le minuteur
+  const [timeLeft, setTimeLeft] = useState(25 * 60); // Converti en secondes
   const [isRunning, setIsRunning] = useState(false);
-  const [mode, setMode] = useState("work"); // Modes : "work", "short-break", "long-break"
+  const [mode] = useState("work"); // Modes : "work", "short-break", "long-break"
+  const [durations, setDurations] = useState({
+    work: 25,
+    shortBreak: 5,
+    longBreak: 15,
+  });
+
+  // Charger les paramètres sauvegardés au montage
+  useEffect(() => {
+    const savedDurations = JSON.parse(localStorage.getItem("pomodoroSettings"));
+    if (savedDurations) {
+      setDurations(savedDurations);
+      setTimeLeft(savedDurations.work * 60); // Converti en secondes
+    }
+  }, []);
+
+  // Surveiller les modifications du `localStorage`
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const updatedSettings = JSON.parse(
+        localStorage.getItem("pomodoroSettings")
+      );
+      if (updatedSettings) {
+        setDurations(updatedSettings);
+        setTimeLeft(updatedSettings[mode] * 60); // Converti en secondes
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, [mode]);
 
   useEffect(() => {
     if (isRunning) {
@@ -23,9 +56,7 @@ function Home() {
 
   const resetTimer = () => {
     setIsRunning(false);
-    setTimeLeft(
-      mode === "work" ? 25 * 60 : mode === "short-break" ? 5 * 60 : 15 * 60
-    );
+    setTimeLeft(durations[mode] * 60); // Converti en secondes
   };
 
   return (
@@ -33,11 +64,12 @@ function Home() {
       <section className="mb-8">
         <p className="text-gray-600 mt-2 text-center">
           Boostez votre productivité avec la méthode Pomodoro :{" "}
-          <b>25 minutes de travail concentré</b> suivies d'une pause.
+          <b>{durations.work} minutes de travail concentré</b> suivies d`une
+          pause de 5 minutes.
         </p>
         <br />
         <h2 className="text-2xl font-semibold mb-4">
-          Qu'est-ce que la méthode Pomodoro ?
+          Qu&apos;est-ce que la méthode Pomodoro ?
         </h2>
         <p className="text-gray-600">
           La méthode Pomodoro est une technique de gestion du temps développée
