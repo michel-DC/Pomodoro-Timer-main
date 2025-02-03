@@ -37,7 +37,6 @@ function App() {
             </nav>
           </header>
 
-          {/* Contenu Principal */}
           <main className="p-6">
             <Routes>
               <Route path="/" element={<Home />} />
