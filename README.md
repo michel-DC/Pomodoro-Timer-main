@@ -116,7 +116,7 @@ This project follows **ESLint** standards with:
 
 ---
 
-### 📊 **Statistics View**
+### 📊 **Settings View**
 
 <div align="center">
   <img src="images-readme/2.png" alt="Statistics" width="500">
@@ -124,7 +124,7 @@ This project follows **ESLint** standards with:
 
 ---
 
-### ⚙️ **Settings Panel**
+### ⚙️ **Statistics Panel**
 
 <div align="center">
   <img src="images-readme/3.png" alt="Settings" width="500">
